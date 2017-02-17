@@ -1,0 +1,26 @@
+RGB to YUV tool
+
+Description:
+
+	RGB to YUV tool is used to modify an image with RGB format to YUV format 
+
+
+Compilation:
+	1. Run autoreconf -iv
+	2. Run ./configure
+	3. Run Make
+
+	The binary is stored under src/
+
+
+Execution:
+	rgb2yuv_c must be executed from src/
+
+	Valid arguments:                                               
+	 -a: displays the information of the author of the program.    
+	 -h: displays this help menu                                   
+	 -i: RGBfile specifies the RGB file to be converted.           
+	 -o: YUVfile specifies the output file name.                   
+
+Command lines Examples:
+        ./rgb2yuv_c -i image.rgb -o image.yuv
