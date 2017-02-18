@@ -1,16 +1,8 @@
-#define PNGSUITE_PRIMARY
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
-#define STB_DEFINE
-#include "stb.h"
-
 #include <math.h>
 #include <string.h>
 #include <unistd.h> // getopt
+
+#include <stdio.h>
 
 int main(int argc, char **argv)
 {
@@ -72,14 +64,45 @@ int main(int argc, char **argv)
 
 void rgb2yuv(char *src_image, char *out_image){
 
-	uint8 *org_image, *result;
-	int *x; int *y; int req_comp;
-	int w, h, depth;
-	//org_image = stbi_load(src_image, &w, &h, &depth, req_comp);
+	//size of individual image
+	int width  = 640;
+	int height = 480;
+	int depthInBytes = 3;
 
-        fprintf(stdout, "w %d\n", w);
-        fprintf(stdout, "h %d\n", h);
-        fprintf(stdout, "depth %d\n", depth);
+    	printf( "Hi\n" );
+    	FILE* pInput  = NULL;
+    	FILE* pOutput = NULL;
+
+        char* buf = (char*) malloc (sizeof(char)*depthInBytes);
+    	memset( buf, 0, depthInBytes );
+
+    	pInput  = fopen( src_image,"rb" );
+    	pOutput = fopen( out_image,"wb" );
+
+
+    	if( pInput && pOutput )
+    	{
+        	for( int i = 0; i < height; i++ )
+        	{
+		
+		  	for (int j=0;j< width;j++){
+
+            			//read pixel, RGB
+            			fread( buf, 1, depthInBytes, pInput );
+
+            			//write pixel, RGB
+            			fwrite( buf, 1, depthInBytes, pOutput );
+
+                                //int position=ftell (pInput);
+				//fprintf(stdout, "Position: %d \n", position);
+			}
+			
+        	}
+    	}
+
+
+    	fclose( pInput );
+    	fclose( pOutput );
 
 }
 
@@ -110,8 +133,6 @@ void print_help(){
 	printf("# Command line examples                                           #\n");
 	printf("#  ./rgb2yuv_c -i image.rgb -o image.yuv                          #\n");
 	printf("###################################################################\n");
-	exit(0);	
+
+
 }
-
-
-

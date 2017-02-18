@@ -483,7 +483,7 @@ configure:5028: gcc -o conftest    conftest.c  >&5
 conftest.c:38:6: warning: conflicting types for built-in function 'pow' [enabled by default]
  char pow ();
       ^
-/tmp/ccWm7e9t.o: In function `main':
+/tmp/ccfXeqCB.o: In function `main':
 conftest.c:(.text+0xa): undefined reference to `pow'
 collect2: error: ld returned 1 exit status
 configure:5028: $? = 1
