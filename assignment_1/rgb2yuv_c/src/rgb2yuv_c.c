@@ -4,6 +4,16 @@
 
 #include <stdio.h>
 
+
+#define CLIP(X) ( (X) > 255 ? 255 : (X) < 0 ? 0 : X)
+
+// RGB -> YUV
+#define RGB2Y(R, G, B) CLIP(( (  66 * (R) + 129 * (G) +  25 * (B) + 128) >> 8) +  16)
+#define RGB2U(R, G, B) CLIP(( ( -38 * (R) -  74 * (G) + 112 * (B) + 128) >> 8) + 128)
+#define RGB2V(R, G, B) CLIP(( ( 112 * (R) -  94 * (G) -  18 * (B) + 128) >> 8) + 128)
+
+
+
 int main(int argc, char **argv)
 {
 
@@ -68,6 +78,7 @@ void rgb2yuv(char *src_image, char *out_image){
 	int width  = 640;
 	int height = 480;
 	int depthInBytes = 3;
+	int depthYUVInBytes = 1.5;
 
     	printf( "Hi\n" );
     	FILE* pInput  = NULL;
@@ -75,6 +86,9 @@ void rgb2yuv(char *src_image, char *out_image){
 
         char* buf = (char*) malloc (sizeof(char)*depthInBytes);
     	memset( buf, 0, depthInBytes );
+
+        char* bufYUV = (char*) malloc (sizeof(char)* depthYUVInBytes * 2);
+    	memset( bufYUV, 0, depthInBytes );
 
     	pInput  = fopen( src_image,"rb" );
     	pOutput = fopen( out_image,"wb" );
@@ -85,16 +99,63 @@ void rgb2yuv(char *src_image, char *out_image){
         	for( int i = 0; i < height; i++ )
         	{
 		
+
+
+
+				unsigned char Y0 = 0;
+				unsigned char U0 = 0;
+				unsigned char V0 = 0;
+
 		  	for (int j=0;j< width;j++){
 
             			//read pixel, RGB
             			fread( buf, 1, depthInBytes, pInput );
 
+
+				unsigned char R = buf[0];
+				unsigned char G = buf[1];
+				unsigned char B = buf[2];
+
+				fprintf(stdout, "R: %d \n", R);
+				fprintf(stdout, "G: %d \n", G);
+				fprintf(stdout, "B: %d \n", B);
+
+					Y0 = RGB2Y(R, G, B);
+					U0 = RGB2U(R, G, B);
+					V0 = RGB2V(R, G, B);
+
+				bufYUV[0] = U0;
+				bufYUV[1] = V0;
+				bufYUV[2] = Y0;
+
+	
             			//write pixel, RGB
-            			fwrite( buf, 1, depthInBytes, pOutput );
+            			fwrite( bufYUV, 1, depthInBytes, pOutput );
+
+
+
+				fprintf(stdout, "Y0: %d \n", Y0);
+				fprintf(stdout, "U0: %d \n", U0);
+				fprintf(stdout, "V0: %d \n", V0);
+
+/*
+
+				fprintf(stdout, "Y1: %d \n", Y1);
+				fprintf(stdout, "U1: %d \n", U1);
+				fprintf(stdout, "V1: %d \n", V1);
+
+*/
+
+
+			
+
+				//}
+
+
 
                                 //int position=ftell (pInput);
 				//fprintf(stdout, "Position: %d \n", position);
+				//free(buf);
 			}
 			
         	}
