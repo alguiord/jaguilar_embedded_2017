@@ -78,7 +78,7 @@ void rgb2yuv(char *src_image, char *out_image){
 	int width  = 640;
 	int height = 480;
 	int depthInBytes = 3;
-	int depthYUVInBytes = 1.5;
+	int depthYUVInBytes = 4;
 
     	printf( "Hi\n" );
     	FILE* pInput  = NULL;
@@ -87,8 +87,8 @@ void rgb2yuv(char *src_image, char *out_image){
         char* buf = (char*) malloc (sizeof(char)*depthInBytes);
     	memset( buf, 0, depthInBytes );
 
-        char* bufYUV = (char*) malloc (sizeof(char)* depthYUVInBytes * 2);
-    	memset( bufYUV, 0, depthInBytes );
+        char* bufYUV = (char*) malloc (sizeof(char)* depthYUVInBytes);
+    	memset( bufYUV, 0, depthYUVInBytes );
 
     	pInput  = fopen( src_image,"rb" );
     	pOutput = fopen( out_image,"wb" );
@@ -106,6 +106,11 @@ void rgb2yuv(char *src_image, char *out_image){
 				unsigned char U0 = 0;
 				unsigned char V0 = 0;
 
+				unsigned char Y1 = 0;
+				unsigned char U1 = 0;
+				unsigned char V1 = 0;
+
+
 		  	for (int j=0;j< width;j++){
 
             			//read pixel, RGB
@@ -119,23 +124,33 @@ void rgb2yuv(char *src_image, char *out_image){
 				fprintf(stdout, "R: %d \n", R);
 				fprintf(stdout, "G: %d \n", G);
 				fprintf(stdout, "B: %d \n", B);
-
-					Y0 = RGB2Y(R, G, B);
-					U0 = RGB2U(R, G, B);
-					V0 = RGB2V(R, G, B);
-
-				bufYUV[0] = U0;
-				bufYUV[1] = V0;
-				bufYUV[2] = Y0;
-
 	
-            			//write pixel, RGB
-            			fwrite( bufYUV, 1, depthInBytes, pOutput );
+
+				if (j%2==1){
+					Y1 = RGB2Y(R, G, B);
+					U1 = RGB2U(R, G, B);
+					V1 = RGB2V(R, G, B);
+
+				bufYUV[0] = U1;
+				bufYUV[1] = Y0;
+				bufYUV[2] = V1;
+				bufYUV[3] = Y1;
+	
+            			//write pixel, YUYV
+            			fwrite( bufYUV, 1, depthYUVInBytes, pOutput );
 
 
 
-				fprintf(stdout, "Y0: %d \n", Y0);
+					
+				}else{
+					Y0 = RGB2Y(R, G, B);
+				}
+
+
+
+
 				fprintf(stdout, "U0: %d \n", U0);
+				fprintf(stdout, "Y0: %d \n", Y0);
 				fprintf(stdout, "V0: %d \n", V0);
 
 /*
