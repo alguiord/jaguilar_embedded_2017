@@ -24,12 +24,12 @@ AC_CHECK_HEADERS([stdlib.h string.h unistd.h math.h])
 AC_TYPE_PID_T
 
 # Checks for library functions.
-##AC_CHECK_PROGS([DOXYGEN], [doxygen])
+#AC_CHECK_PROGS([DOXYGEN], [doxygen])
 AC_FUNC_FORK
 AC_FUNC_MALLOC
 #AC_CHECK_FUNCS()
 AC_SEARCH_LIBS([pow],[m])
 
-AC_CONFIG_FILES([Makefile src/Makefile])
-##AC_CONFIG_FILES([Makefile src/Makefile  docs/Makefile  doc/Makefile doc/Doxygen ])
+#AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile doc/Doxygen])
 AC_OUTPUT

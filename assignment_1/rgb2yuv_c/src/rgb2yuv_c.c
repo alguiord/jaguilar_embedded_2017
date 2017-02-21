@@ -1,8 +1,12 @@
 #include <math.h>
 #include <string.h>
 #include <unistd.h> // getopt
-
+#include <sys/time.h>
 #include <stdio.h>
+#include <errno.h>
+
+#define DEBUG 0
+
 
 
 #define CLIP(X) ( (X) > 255 ? 255 : (X) < 0 ? 0 : X)
@@ -14,8 +18,11 @@
 
 
 
+
 int main(int argc, char **argv)
 {
+    	struct timeval t1, t2;
+    	double elapsedTime;
 
 	int c;
 	char *src_image = NULL;
@@ -66,7 +73,33 @@ int main(int argc, char **argv)
 	}
 
 
+  	// start timer
+    	gettimeofday(&t1, NULL);
+
 	rgb2yuv(src_image, out_image);
+
+    	// stop timer
+    	gettimeofday(&t2, NULL);
+
+        if(DEBUG){
+        fprintf(stdout, "-Info- t1.tv_sec: %d\n", t1.tv_sec);
+        fprintf(stdout, "-Info- t1.tv_usec: %d\n", t1.tv_usec);
+        fprintf(stdout, "-Info- t2.tv_sec: %d\n", t2.tv_sec);
+        fprintf(stdout, "-Info- t2.tv_usec: %d\n", t2.tv_usec);
+	}
+
+
+    	// compute and print the elapsed time in millisec
+    	elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+
+	if(DEBUG){
+        	fprintf(stdout, "-Info- The elapsed time of the funtion 'rgb2yuv' was: %f\n", elapsedTime);
+	}
+
+    	elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
+
+        fprintf(stdout, "-Info- The elapsed time of the function 'rgb2yuv' was: %f ms\n", elapsedTime);
+
 
 	return 0;
 }
@@ -80,7 +113,6 @@ void rgb2yuv(char *src_image, char *out_image){
 	int depthInBytes = 3;
 	int depthYUVInBytes = 4;
 
-    	printf( "Hi\n" );
     	FILE* pInput  = NULL;
     	FILE* pOutput = NULL;
 
@@ -102,13 +134,10 @@ void rgb2yuv(char *src_image, char *out_image){
 
 
 
-				unsigned char Y0 = 0;
-				unsigned char U0 = 0;
-				unsigned char V0 = 0;
-
-				unsigned char Y1 = 0;
-				unsigned char U1 = 0;
-				unsigned char V1 = 0;
+			unsigned char Y0 = 0;
+			unsigned char Y1 = 0;
+			unsigned char U1 = 0;
+			unsigned char V1 = 0;
 
 
 		  	for (int j=0;j< width;j++){
@@ -121,9 +150,11 @@ void rgb2yuv(char *src_image, char *out_image){
 				unsigned char G = buf[1];
 				unsigned char B = buf[2];
 
+				if(DEBUG){ 
 				fprintf(stdout, "R: %d \n", R);
 				fprintf(stdout, "G: %d \n", G);
 				fprintf(stdout, "B: %d \n", B);
+				}
 	
 
 				if (j%2==1){
@@ -131,46 +162,25 @@ void rgb2yuv(char *src_image, char *out_image){
 					U1 = RGB2U(R, G, B);
 					V1 = RGB2V(R, G, B);
 
-				bufYUV[0] = U1;
-				bufYUV[1] = Y0;
-				bufYUV[2] = V1;
-				bufYUV[3] = Y1;
+					bufYUV[0] = U1;
+					bufYUV[1] = Y0;
+					bufYUV[2] = V1;
+					bufYUV[3] = Y1;
 	
-            			//write pixel, YUYV
-            			fwrite( bufYUV, 1, depthYUVInBytes, pOutput );
-
-
-
-					
+            				//write pixel, YUYV
+            				fwrite( bufYUV, 1, depthYUVInBytes, pOutput );
 				}else{
 					Y0 = RGB2Y(R, G, B);
 				}
 
 
-
-
-				fprintf(stdout, "U0: %d \n", U0);
-				fprintf(stdout, "Y0: %d \n", Y0);
-				fprintf(stdout, "V0: %d \n", V0);
-
-/*
-
-				fprintf(stdout, "Y1: %d \n", Y1);
+				if(DEBUG){
 				fprintf(stdout, "U1: %d \n", U1);
+				fprintf(stdout, "Y0: %d \n", Y0);
 				fprintf(stdout, "V1: %d \n", V1);
+				fprintf(stdout, "Y1: %d \n", Y1);
+				}
 
-*/
-
-
-			
-
-				//}
-
-
-
-                                //int position=ftell (pInput);
-				//fprintf(stdout, "Position: %d \n", position);
-				//free(buf);
 			}
 			
         	}
@@ -179,6 +189,9 @@ void rgb2yuv(char *src_image, char *out_image){
 
     	fclose( pInput );
     	fclose( pOutput );
+
+	free(buf);
+	free(bufYUV);
 
 }
 
