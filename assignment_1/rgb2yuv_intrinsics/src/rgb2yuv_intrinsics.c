@@ -1,12 +1,15 @@
 #include <math.h>
 #include <string.h>
 #include <unistd.h> // getopt
-
+#include <sys/time.h>
 #include <stdio.h>
 
 #include <arm_neon.h>
+#include <errno.h>
 
+#define DEBUG 0
 
+/*
 #define CLIP(X) ( (X) > 255 ? 255 : (X) < 0 ? 0 : X)
 
 // RGB -> YUV
@@ -14,10 +17,15 @@
 #define RGB2U(R, G, B) CLIP(( ( -38 * (R) -  74 * (G) + 112 * (B) + 128) >> 8) + 128)
 #define RGB2V(R, G, B) CLIP(( ( 112 * (R) -  94 * (G) -  18 * (B) + 128) >> 8) + 128)
 
+*/
 
 
 int main(int argc, char **argv)
 {
+
+    	struct timeval t1, t2;
+    	double elapsedTime;
+
 
 	int c;
 	char *src_image = NULL;
@@ -68,7 +76,34 @@ int main(int argc, char **argv)
 	}
 
 
+
+  	// start timer
+    	gettimeofday(&t1, NULL);
+
 	rgb2yuv(src_image, out_image);
+
+    	// stop timer
+    	gettimeofday(&t2, NULL);
+
+        if(DEBUG){
+        fprintf(stdout, "-Info- t1.tv_sec: %d\n", t1.tv_sec);
+        fprintf(stdout, "-Info- t1.tv_usec: %d\n", t1.tv_usec);
+        fprintf(stdout, "-Info- t2.tv_sec: %d\n", t2.tv_sec);
+        fprintf(stdout, "-Info- t2.tv_usec: %d\n", t2.tv_usec);
+	}
+
+
+    	// compute and print the elapsed time in millisec
+    	elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+
+	if(DEBUG){
+        	fprintf(stdout, "-Info- The elapsed time of the funtion 'rgb2yuv' was: %f\n", elapsedTime);
+	}
+
+    	elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
+
+        fprintf(stdout, "-Info- The elapsed time of the function 'rgb2yuv' was: %f ms\n", elapsedTime);
+
 
 	return 0;
 }
@@ -83,139 +118,149 @@ void rgb2yuv(char *src_image, char *out_image){
 	int depthYUVInBytes = 4;
 	int sizeImage = width * height;
 
-    	printf( "Hi\n" );
     	FILE* pInput  = NULL;
     	FILE* pOutput = NULL;
-
-        char* buf = (char*) malloc (sizeof(char)*depthInBytes);
-    	memset( buf, 0, depthInBytes );
-
-        char* bufYUV = (char*) malloc (sizeof(char)* depthYUVInBytes);
-    	memset( bufYUV, 0, depthYUVInBytes );
-
-
-        char* bufR = (char*) malloc (sizeof(char)* sizeImage);
-    	memset( bufR, 0, sizeImage );
-        char* bufG = (char*) malloc (sizeof(char)* sizeImage);
-    	memset( bufG, 0, sizeImage );
-        char* bufB = (char*) malloc (sizeof(char)* sizeImage);
-    	memset( bufB, 0, sizeImage );
-
-/*
-        char* buf66 = (char*) malloc (sizeof(char)* sizeImage);
-    	memset( buf66, 66, sizeImage );
-
-        char* buf38 = (char*) malloc (sizeof(char)* sizeImage);
-    	memset( buf38, 38, sizeImage );
-
-        char* buf112 = (char*) malloc (sizeof(char)* sizeImage);
-    	memset( buf112, 112, sizeImage );
-
-        char* buf129 = (char*) malloc (sizeof(char)* sizeImage);
-    	memset( buf129, 129, sizeImage );
-
-        char* buf74 = (char*) malloc (sizeof(char)* sizeImage);
-    	memset( buf74, 74, sizeImage );
-*/
-
 
     	pInput  = fopen( src_image,"rb" );
     	pOutput = fopen( out_image,"wb" );
 
 
-    	if( pInput && pOutput )
-    	{
-        	for( int i = 0; i < height; i++ )
-        	{
-		
+        uint8_t* bufRGB = (uint8_t*) malloc (sizeof(uint8_t)*sizeImage*depthInBytes);
+    	memset( bufRGB, 0, sizeImage*depthInBytes );
+
+        fread( bufRGB, 1, sizeImage*depthInBytes, pInput );
 
 
 
-				unsigned char Y0 = 0;
-				unsigned char U0 = 0;
-				unsigned char V0 = 0;
-
-				unsigned char Y1 = 0;
-				unsigned char U1 = 0;
-				unsigned char V1 = 0;
+  int i;
+  uint8x8_t rfac_y = vdup_n_u8 (66);
+  uint8x8_t gfac_y = vdup_n_u8 (129);
+  uint8x8_t bfac_y = vdup_n_u8 (25);
 
 
-		  	for (int j=0;j< width;j++){
+  uint8x8_t rfac_u = vdup_n_u8 (38);
+  uint8x8_t gfac_u = vdup_n_u8 (74);
+  uint8x8_t bfac_u = vdup_n_u8 (112);
 
-            			//read pixel, RGB
-            			fread( buf, 1, depthInBytes, pInput );
-
-
-				unsigned char R = buf[0];
-				unsigned char G = buf[1];
-				unsigned char B = buf[2];
-
-				fprintf(stdout, "R: %d \n", R);
-				fprintf(stdout, "G: %d \n", G);
-				fprintf(stdout, "B: %d \n", B);
-
-				bufR[(i*width)+j] = R;
-				bufG[(i*width)+j] = G;
-				bufB[(i*width)+j] = B;
-
-				fprintf(stdout, "(i*width)+j: %d \n", (i*width)+j);
-	
-
-				if (j%2==1){
-					Y1 = RGB2Y(R, G, B);
-					U1 = RGB2U(R, G, B);
-					V1 = RGB2V(R, G, B);
-
-				bufYUV[0] = U1;
-				bufYUV[1] = Y0;
-				bufYUV[2] = V1;
-				bufYUV[3] = Y1;
-	
-            			//write pixel, YUYV
-            			fwrite( bufYUV, 1, depthYUVInBytes, pOutput );
+  uint8x8_t rfac_v = vdup_n_u8 (112);
+  uint8x8_t gfac_v = vdup_n_u8 (94);
+  uint8x8_t bfac_v = vdup_n_u8 (18);
 
 
+  uint16x8_t v128pq = vdupq_n_u16(128);
 
-					
-				}else{
-					Y0 = RGB2Y(R, G, B);
-				}
-
+  uint8x8_t v16p   = vdup_n_u8(16);
+  uint8x8_t v128p = vdup_n_u8(128);
 
 
+  sizeImage/=8;
 
-				fprintf(stdout, "U0: %d \n", U0);
-				fprintf(stdout, "Y0: %d \n", Y0);
-				fprintf(stdout, "V0: %d \n", V0);
-
-/*
-
-				fprintf(stdout, "Y1: %d \n", Y1);
-				fprintf(stdout, "U1: %d \n", U1);
-				fprintf(stdout, "V1: %d \n", V1);
-
-*/
+  uint16x8_t  temp;
+  uint8x8_t result;
 
 
-			
+  uint8_t* bufY = (uint8_t*) malloc (sizeof(uint8_t)* 8);
+  memset( bufY, 0, 8 );
 
-				//}
+  uint8_t* bufU = (uint8_t*) malloc (sizeof(uint8_t)* 8);
+  memset( bufU, 0, 8 );
+
+  uint8_t* bufV = (uint8_t*) malloc (sizeof(uint8_t)* 8);
+  memset( bufV, 0, 8 );
+
+  uint8_t* bufYUV = (uint8_t*) malloc (sizeof(uint8_t)* 16);
+  memset( bufYUV, 0, 16 );
+
+
+  for (i=0; i<sizeImage; i++)
+  {
+    uint8x8x3_t rgb  = vld3_u8 (bufRGB);
+
+    //Calculating Y
+    temp = vmull_u8 (rgb.val[0],      rfac_y);
+    temp = vmlal_u8 (temp,rgb.val[1], gfac_y);
+    temp = vmlal_u8 (temp,rgb.val[2], bfac_y);
+
+    temp = vaddq_u16(temp, v128pq);
+
+    result = vshrn_n_u16 (temp, 8);
+
+    result = vadd_u8(result, v16p);
+    vst1_u8 (bufY, result);
+
+    //destY += 8;
+
+
+    //Calculating U
+
+    temp = vmull_u8 (rgb.val[2],      bfac_u);
+    temp = vmlsl_u8 (temp,rgb.val[1], gfac_u);
+    temp = vmlsl_u8 (temp,rgb.val[0], rfac_u);
+
+    temp = vaddq_u16(temp, v128pq);
+
+    result = vshrn_n_u16 (temp, 8);
+
+    result = vadd_u8(result, v128p);
+    vst1_u8 (bufU, result);
+
+    //destU += 8;
+
+    //Calculating V
+
+
+    temp = vmull_u8 (rgb.val[0],      rfac_v);
+    temp = vmlsl_u8 (temp,rgb.val[1], gfac_v);
+    temp = vmlsl_u8 (temp,rgb.val[2], bfac_v);
+
+    temp = vaddq_u16(temp, v128pq);
+
+    result = vshrn_n_u16 (temp, 8);
+
+    result = vadd_u8(result, v128p);
+    vst1_u8 (bufV, result);
+
+    //destV += 8;
+
+    bufYUV[0] = bufU[1];
+    bufYUV[1] = bufY[0];
+    bufYUV[2] = bufV[1];
+    bufYUV[3] = bufY[1];
+
+    bufYUV[4] = bufU[3];
+    bufYUV[5] = bufY[2];
+    bufYUV[6] = bufV[3];
+    bufYUV[7] = bufY[3];
+
+    bufYUV[8] = bufU[5];
+    bufYUV[9] = bufY[4];
+    bufYUV[10] = bufV[5];
+    bufYUV[11] = bufY[5];
+
+    bufYUV[12] = bufU[7];
+    bufYUV[13] = bufY[6];
+    bufYUV[14] = bufV[7];
+    bufYUV[15] = bufY[7];
 
 
 
-                                //int position=ftell (pInput);
-				//fprintf(stdout, "Position: %d \n", position);
-				//free(buf);
-			}
-			
-        	}
-    	}
+    //write pixel, YUYV
+    fwrite( bufYUV, 1, 16, pOutput );
+
+
+
+    bufRGB  += 8*3;
+  }
 
 
     	fclose( pInput );
     	fclose( pOutput );
 
+
 }
+
+
+
 
 
 void print_autor(){
@@ -242,7 +287,7 @@ void print_help(){
 	printf("#   -o: YUVfile specifies the output file name.                   #\n");
 	printf("#                                                                 #\n");
 	printf("# Command line examples                                           #\n");
-	printf("#  ./rgb2yuv_c -i image.rgb -o image.yuv                          #\n");
+	printf("#  ./rgb2yuv_intrinsics -i image.rgb -o image.yuv                 #\n");
 	printf("###################################################################\n");
 
 

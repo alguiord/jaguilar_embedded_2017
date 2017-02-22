@@ -250,7 +250,7 @@ am__quote =
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
-build_alias = x86_64-linux-gnu
+build_alias = 
 builddir = .
 datadir = ${datarootdir}
 datarootdir = ${prefix}/share
@@ -270,7 +270,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /usr/bin
+prefix = /usr/local
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
@@ -281,7 +281,7 @@ target_alias =
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-SUBDIRS = src
+SUBDIRS = src doc
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 

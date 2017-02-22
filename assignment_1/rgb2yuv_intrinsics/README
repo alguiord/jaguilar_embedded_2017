@@ -7,7 +7,7 @@ Description:
 
 Compilation:
 	1. Run autoreconf -iv
-	2. Run ./configure
+	2. Run ./configure --host=arm-linux-gnueabi 
 	3. Run Make
 
 	The binary is stored under src/
@@ -23,4 +23,4 @@ Execution:
 	 -o: YUVfile specifies the output file name.                   
 
 Command lines Examples:
-        ./rgb2yuv_c -i image.rgb -o image.yuv
+        ./rgb2yuv_intrinsics -i image.rgb -o image.yuv

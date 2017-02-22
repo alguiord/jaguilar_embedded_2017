@@ -32,6 +32,6 @@ AC_FUNC_MALLOC
 #AC_CHECK_FUNCS()
 AC_SEARCH_LIBS([pow],[m])
 
-AC_CONFIG_FILES([Makefile src/Makefile])
-##AC_CONFIG_FILES([Makefile src/Makefile  docs/Makefile  doc/Makefile doc/Doxygen ])
+#AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile  doc/Makefile doc/Doxygen ])
 AC_OUTPUT
