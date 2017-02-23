@@ -201,7 +201,7 @@ void print_autor(){
 	printf("#           RGB to YUV tool                #\n");
 	printf("#############################################\n");
 	printf("# Autores: Antonio Aguilar Bravo            #\n");
-	printf("#          Brayan              #\n");
+	printf("#          Brayan Alfaro Cerdas             #\n");
 	printf("# Maestria Sistemas Embebidos               #\n");
 	printf("# Instituo Tecnologico de Costa Rica        #\n");
 	printf("#############################################\n");

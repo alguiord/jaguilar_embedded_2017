@@ -88,7 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p><a href="information_8h_source.html">Go to the source code of this file.</a></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Assignment 1: Bump it up! </p>
-<dl class="section author"><dt>Authors</dt><dd>Jose Antonio Aguilar Bravo/ Brayan/ </dd></dl>
+<dl class="section author"><dt>Authors</dt><dd>Jose Antonio Aguilar Bravo/ Brayan Alfaro Cerdas/</dd></dl>
 <h1><a class="anchor" id="USAGE"></a>
 USAGE</h1>
 <p>This program performs an image conversion from RGB format to YUV format.</p>
@@ -118,19 +118,23 @@ Conversion algorithm:</h1>
 <h2><a class="anchor" id="input"></a>
 Input Image format:</h2>
 <p>RGB888, no alpha.</p>
-<p>Command line to generate the sample image: gst-launch-0.10 videotestsrc num-buffers=1 ! video/x-raw-rgb, bpp=24, depth=24, width=640, height=480 ! filesink location=image.rgb</p>
-<h2><a class="anchor" id="output"></a>
+<p>Command line to generate the sample image: </p>
+<pre class="fragment">gst-launch-0.10 videotestsrc num-buffers=1 ! video/x-raw-rgb,  bpp=24, depth=24, width=640, height=480 ! filesink location=image.rgb
+</pre><h2><a class="anchor" id="output"></a>
 Output Image format:</h2>
-<p>UYVY, where Y is sample every pixel and U/V are sample every two pixels, so we get a reduction from 1 to 2/3</p>
+<p>UYVY, where Y is sample every pixel and U/V are sample every two pixels, so we get a reduction from 1 to 2/3: </p>
+<div class="image">
+<img src="sizeImages.png" alt="sizeImages.png"/>
+</div>
 <h2><a class="anchor" id="Example"></a>
 Image Samples</h2>
 <p>Input image: </p>
 <div class="image">
-<img src="image.rgb" alt="image.rgb"/>
+<img src="imageRGB.png" alt="imageRGB.png"/>
 </div>
 <p>Output image: </p>
 <div class="image">
-<img src="image.yuv" alt="image.yuv"/>
+<img src="imageYUV.png" alt="imageYUV.png"/>
 </div>
 <h2><a class="anchor" id="time"></a>
 Processing time:</h2>
@@ -138,7 +142,7 @@ Processing time:</h2>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 20 2017 23:00:40 for Assignment 1 by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 22 2017 20:51:43 for Assignment 1 by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

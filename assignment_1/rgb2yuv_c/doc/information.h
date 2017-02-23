@@ -1,7 +1,8 @@
 /**
  * @file information.h
  * @authors Jose Antonio Aguilar Bravo/
- *	    Brayan/
+ *	    Brayan Alfaro Cerdas/
+ *
  * @brief Assignment 1: Bump it up! 
  *
  * @section USAGE
@@ -47,20 +48,22 @@
  * RGB888, no alpha. 
  *
  * Command line to generate the sample image:
+ * 
  * 	gst-launch-0.10 videotestsrc num-buffers=1 ! video/x-raw-rgb,  bpp=24, depth=24, width=640, height=480 ! filesink location=image.rgb
  *
  * @subsection output Output Image format:
  *
- * UYVY, where Y is sample every pixel and U/V are sample every two pixels, so we get a reduction from 1 to 2/3
+ * UYVY, where Y is sample every pixel and U/V are sample every two pixels, so we get a reduction from 1 to 2/3:
+ * @image html sizeImages.png
  *
  *
  *
  * @subsection Example Image Samples 
  * Input image:
- * @image html image.rgb
+ * @image html imageRGB.png
  *
  * Output image:
- * @image html image.yuv
+ * @image html imageYUV.png
  *
  * @subsection time Processing time:
  * The elapsed time of the function 'rgb2yuv' was: 11.052000 ms
