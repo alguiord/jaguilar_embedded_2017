@@ -131,20 +131,32 @@ void rgb2yuv(char *src_image, char *out_image){
         fread( bufRGB, 1, sizeImage*depthInBytes, pInput );
 
 	
+/*
   asm(
         //This need to be implemented
-	//r0: Ptr to destination data
 	//r1: Ptr to source data, means Ptr to bufRGB
-	//r2: Iteration count	
-        ""
+        "mov r1, %[bufRGB]\n\t"
+        ://no output       
+        :[bufRGB]"m"(bufRGB) //Input
+	:"r1"
 	);
 
+  asm(
+        //This need to be implemented
+	//r2: Iteration count	
+        "mov r2, %[sizeImage]\n\t"
+        ://no output       
+        :[sizeImage]"m"(sizeImage) //Input
+	);
 
-  ////$  
+  ////$ 
+*/
+
+  /* 
   uint8x8_t rfac_y = vdup_n_u8 (66);//VDUP.8 d0,r0
   uint8x8_t gfac_y = vdup_n_u8 (129);
   uint8x8_t bfac_y = vdup_n_u8 (25);
-
+  */
   asm(
 	"mov r3, #66\n\t"
 	"mov r4, #129\n\t"
@@ -159,10 +171,11 @@ void rgb2yuv(char *src_image, char *out_image){
 
 
   ////#
+  /*
   uint8x8_t rfac_u = vdup_n_u8 (38);
   uint8x8_t gfac_u = vdup_n_u8 (74);
   uint8x8_t bfac_u = vdup_n_u8 (112);
-
+  */
   asm(
 	"mov r3, #38\n\t"
 	"mov r4, #74\n\t"
@@ -176,9 +189,11 @@ void rgb2yuv(char *src_image, char *out_image){
   ////#
 
   ////@
+  /*
   uint8x8_t rfac_v = vdup_n_u8 (112);
   uint8x8_t gfac_v = vdup_n_u8 (94);
   uint8x8_t bfac_v = vdup_n_u8 (18);
+  */
 
   asm(
 	"mov r3, #112\n\t"
@@ -194,14 +209,14 @@ void rgb2yuv(char *src_image, char *out_image){
 
 
 
-  uint16x8_t v128pq = vdupq_n_u16(128);  //q0
+  //uint16x8_t v128pq = vdupq_n_u16(128);  //q0
   asm( 
 	"mov r3, #128\n\t"
 	"vdup.16 q0,r3\n\t"
 	
-);	
+	);	
 
-  uint8x8_t v16p   = vdup_n_u8(16); //d12
+  //uint8x8_t v16p   = vdup_n_u8(16); //d12
 
   asm(
       "mov r3, #16\n\t"
@@ -209,7 +224,7 @@ void rgb2yuv(char *src_image, char *out_image){
 	);
 
 
-  uint8x8_t v128p = vdup_n_u8(128);  //d13
+  //uint8x8_t v128p = vdup_n_u8(128);  //d13
   asm(
       "mov r3, #128\n\t"
       "vdup.8 d13, r3\n\t"
@@ -229,7 +244,7 @@ void rgb2yuv(char *src_image, char *out_image){
 
 
   ////!
-  sizeImage/=8;
+  //sizeImage/=8;
 
   asm(
 	"lsr r2,r2,#3"
@@ -253,17 +268,24 @@ void rgb2yuv(char *src_image, char *out_image){
   uint8_t* bufYUV = (uint8_t*) malloc (sizeof(uint8_t)* 16);
   memset( bufYUV, 0, 16 );
 
-  int i;
-  for (i=0; i<sizeImage; i++)
-  {
+
+
+
+
+  //int i;
+  //for (i=0; i<sizeImage; i++)
+  //{
+   asm(".loop:");
   
-    uint8x8x3_t rgb  = vld3_u8 (bufRGB);
+    //uint8x8x3_t rgb  = vld3_u8 (bufRGB);
     asm("vld3.8 {d0-d2}, [r1]!");
 
     //Calculating Y
+    /*
     temp = vmull_u8 (rgb.val[0],      rfac_y);
     temp = vmlal_u8 (temp,rgb.val[1], gfac_y);
     temp = vmlal_u8 (temp,rgb.val[2], bfac_y);
+    */
 
     asm(
 	"vmull.u8 q3, d0, d3\n\t"
@@ -273,57 +295,78 @@ void rgb2yuv(char *src_image, char *out_image){
 	);
 
 
-    temp = vaddq_u16(temp, v128pq);
+    //temp = vaddq_u16(temp, v128pq);
     asm("vadd.i16 q3, q3, q0\n\t");
 
 
-    result = vshrn_n_u16 (temp, 8);
+    //result = vshrn_n_u16 (temp, 8);
     asm("vshrn.i16 d15,q3,#8\n\t");
 
-    result = vadd_u8(result, v16p);
+    //result = vadd_u8(result, v16p);
     asm("vadd.i8 d15,d15,d12\n\t");
 
 
-    vst1_u8 (bufY, result);
+/*
+     asm(
+        //This need to be implemented
+	//r0: Ptr to dest data, means Ptr to bufYUV
+        "mov r0, %[bufY]\n\t"
+        :[bufY]"=m"(bufY[0]) //Output
+	://No input
+	);
+*/
+    //vst1_u8 (bufY, result);
+    asm("VST1.8 {d15}, [r0]");
 
-   
+
 
     //Calculating U
-
+    /*
     temp = vmull_u8 (rgb.val[2],      bfac_u);
     temp = vmlsl_u8 (temp,rgb.val[1], gfac_u);
     temp = vmlsl_u8 (temp,rgb.val[0], rfac_u);
+    */
 
     asm(
 	"vmull.u8 q3, d2, d5\n\t"
         "vmlsl.u8 q3, d1, d4\n\t"
         "vmlsl.u8 q3, d0, d3\n\t"
-
 	);
 
 
-    temp = vaddq_u16(temp, v128pq);
+    //temp = vaddq_u16(temp, v128pq);
     asm("vadd.i16 q3, q3, q0\n\t");
 
 
-    result = vshrn_n_u16 (temp, 8);
+    //result = vshrn_n_u16 (temp, 8);
     asm("vshrn.i16 d15,q3,#8\n\t");
 
 
-    result = vadd_u8(result, v128p);
+    //result = vadd_u8(result, v128p);
     asm("vadd.i8 d15,d15,d12\n\t");
 
+    //vst1_u8 (bufU, result);
+/*
+    asm(
+        //This need to be implemented
+	//r0: Ptr to dest data, means Ptr to bufU
+        "mov r0, %[bufU]\n\t"
+        :[bufU]"=m"(bufU[0]) //Output
+	://No input
+	);
+*/
+     //vst1_u8 (bufU, result);
+     asm("VST1.8 {d15}, [r0]");
 
-    vst1_u8 (bufU, result);
-
-    //destU += 8;
+    
 
     //Calculating V
 
-
+    /*
     temp = vmull_u8 (rgb.val[0],      rfac_v);
     temp = vmlsl_u8 (temp,rgb.val[1], gfac_v);
     temp = vmlsl_u8 (temp,rgb.val[2], bfac_v);
+    */
 
     asm(
 	"vmull.u8 q3, d0, d3\n\t"
@@ -334,20 +377,33 @@ void rgb2yuv(char *src_image, char *out_image){
 
 
 
-    temp = vaddq_u16(temp, v128pq);
+    //temp = vaddq_u16(temp, v128pq);
     asm("vadd.i16 q3, q3, q0\n\t");
 
 
-    result = vshrn_n_u16 (temp, 8);
+    //result = vshrn_n_u16 (temp, 8);
     asm("vshrn.i16 d15,q3,#8\n\t");
 
 
-    result = vadd_u8(result, v128p);
+    //result = vadd_u8(result, v128p);
     asm("vadd.i8 d15,d15,d13\n\t");
 
-    vst1_u8 (bufV, result);
+    //vst1_u8 (bufV, result);
+/*
+    asm(
+        //This need to be implemented
+	//r0: Ptr to dest data, means Ptr to bufV
+        "mov r0, %[bufV]\n\t"
+        :[bufV]"=m"(bufV[0]) //Output
+	://No input
+	);
+*/
+     //vst1_u8 (bufV, result);
+     asm("VST1.8 {d15}, [r0]");
 
-    //destV += 8;
+    
+
+
 
     bufYUV[0] = bufU[1];
     bufYUV[1] = bufY[0];
@@ -376,8 +432,14 @@ void rgb2yuv(char *src_image, char *out_image){
 
 
 
-    bufRGB  += 8*3;
-  }
+    //bufRGB  += 8*3;
+    asm("add r1, r1, #24\n\t");
+
+  //}
+  asm( 
+      "subs        r2, r2, #1\n\t"
+      "bne         .loop\n\t"	
+	);
 
 
     	fclose( pInput );
