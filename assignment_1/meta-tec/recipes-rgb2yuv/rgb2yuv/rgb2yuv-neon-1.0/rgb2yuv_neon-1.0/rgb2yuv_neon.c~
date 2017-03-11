@@ -130,6 +130,7 @@ void rgb2yuv(char *src_image, char *out_image){
 
         fread( bufRGB, 1, sizeImage*depthInBytes, pInput );
 
+
 	
 /*
   asm(
@@ -151,6 +152,18 @@ void rgb2yuv(char *src_image, char *out_image){
 
   ////$ 
 */
+
+
+
+  asm(
+        "ldr r1,[%[bufRGB]] \n\t"
+        : [bufRGB] "+r" (bufRGB)
+        );
+
+  asm(
+        "ldr r2,[%[sizeImage]] \n\t"
+        : [sizeImage] "+r" (sizeImage)
+        );
 
   /* 
   uint8x8_t rfac_y = vdup_n_u8 (66);//VDUP.8 d0,r0
@@ -315,6 +328,13 @@ void rgb2yuv(char *src_image, char *out_image){
 	://No input
 	);
 */
+
+  asm(
+        "ldr r0,[%[bufY]] \n\t"
+        : [bufY] "+r" (bufY)
+        );
+
+
     //vst1_u8 (bufY, result);
     asm("VST1.8 {d15}, [r0]");
 
@@ -355,6 +375,13 @@ void rgb2yuv(char *src_image, char *out_image){
 	://No input
 	);
 */
+
+  asm(
+        "ldr r0,[%[bufU]] \n\t"
+        : [bufU] "+r" (bufU)
+        );
+
+
      //vst1_u8 (bufU, result);
      asm("VST1.8 {d15}, [r0]");
 
@@ -398,6 +425,14 @@ void rgb2yuv(char *src_image, char *out_image){
 	://No input
 	);
 */
+
+
+  asm(
+        "ldr r0,[%[bufV]] \n\t"
+        : [bufV] "+r" (bufV)
+        );
+
+
      //vst1_u8 (bufV, result);
      asm("VST1.8 {d15}, [r0]");
 

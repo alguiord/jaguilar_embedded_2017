@@ -113,6 +113,28 @@ void rgb2yuv(char *src_image, char *out_image){
 
 
 
+	
+/*
+  asm(
+        //This need to be implemented
+	//r1: Ptr to source data, means Ptr to bufRGB
+        "mov r1, %[bufRGB]\n\t"
+        ://no output       
+        :[bufRGB]"m"(bufRGB) //Input
+	:"r1"
+	);
+
+  asm(
+        //This need to be implemented
+	//r2: Iteration count	
+        "mov r2, %[sizeImage]\n\t"
+        ://no output       
+        :[sizeImage]"m"(sizeImage) //Input
+	);
+
+  ////$ 
+*/
+
 
 
 
@@ -122,6 +144,20 @@ asm (
     : [bufRGB] "r" (bufRGB)
     : "r1");
 
+
+/*
+
+fprintf(stdout, "[debug 1] bufRGB: %d\n", bufRGB);
+fprintf(stdout, "r1: %d\n\n", r1);
+
+
+asm (
+      "mov r1, %[r1]\n\t"
+    : // no outputs
+    : [r1] "r" (r1)
+    :"r1");
+
+*/
 
 
 
@@ -215,6 +251,24 @@ asm (
       "vdup.8 d13, r3\n\t"
       );
 
+/*
+  asm(
+	"mov r3, #112\n\t"
+	"mov r4, #94\n\t"
+        "mov r5, #18\n\t"
+
+        "vdup.8 d9, r3\n\t"
+        "vdup.8 d10, r4\n\t"
+        "vdup.8 d11, r5\n\t"
+
+  );
+
+*/
+
+
+
+
+
 
 
 
@@ -243,6 +297,25 @@ asm (
    asm(".loop:");
   
 
+
+
+    //uint8x8x3_t rgb  = vld3_u8 (bufRGB);
+    //asm("vld3.8 {d0,d1,d2}, [r1]!\n\t");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	asm (
 	     "vld3.8 {d0,d1,d2}, [r1]! \n\t");
 
@@ -261,6 +334,9 @@ asm (
 
 
     asm(
+	//"vmull.u8 q3, d0, d3\n\t"
+        //"vmlal.u8 q3, d1, d4\n\t"
+        //"vmlal.u8 q3, d2, d5\n\t"
 
 	"vmull.u8 q13, d0, d3\n\t"
         "vmlal.u8 q13, d1, d4\n\t"
@@ -272,6 +348,7 @@ asm (
 
 
     //temp = vaddq_u16(temp, v128pq);
+    //asm("vadd.i16 q3, q3, q0\n\t");
     asm("vadd.i16 q13, q13, q14\n\t");
 
     //result = vshrn_n_u16 (temp, 8);
@@ -295,6 +372,19 @@ asm (
 
 
 
+
+
+
+
+    //vst1_u8 (bufY, result);
+    //asm("VST1.8 {d15}, [r0]");
+
+
+
+
+
+
+
     //Calculating U
     /*
     temp = vmull_u8 (rgb.val[2],      bfac_u);
@@ -303,7 +393,9 @@ asm (
     */
 
     asm(
-
+	//"vmull.u8 q13, d2, d5\n\t"
+        //"vmlsl.u8 q13, d1, d4\n\t"
+        //"vmlsl.u8 q13, d0, d3\n\t"
 	"vmull.u8 q13, d2, d8\n\t"
         "vmlsl.u8 q13, d1, d7\n\t"
         "vmlsl.u8 q13, d0, d6\n\t"
@@ -351,6 +443,9 @@ asm (
     */
 
     asm(
+	//"vmull.u8 q13, d0, d3\n\t"
+        //"vmlsl.u8 q13, d1, d4\n\t"
+        //"vmlsl.u8 q13, d2, d5\n\t"
 
 	"vmull.u8 q13, d0, d9\n\t"
         "vmlsl.u8 q13, d1, d10\n\t"
@@ -372,7 +467,28 @@ asm (
     //result = vadd_u8(result, v128p);
     asm("vadd.i8 d15,d15,d13\n\t");
 
+    //vst1_u8 (bufV, result);
+/*
+    asm(
+        //This need to be implemented
+	//r0: Ptr to dest data, means Ptr to bufV
+        "mov r0, %[bufV]\n\t"
+        :[bufV]"=m"(bufV[0]) //Output
+	://No input
+	);
+*/
+/*
 
+  asm(
+        "ldr r0,[%[bufV]] \n\t"
+        : [bufV] "+r" (bufV)
+        );
+
+
+     //vst1_u8 (bufV, result);
+     asm("VST1.8 {d15}, [r0]");
+
+    */
 
 
 asm (
@@ -382,7 +498,42 @@ asm (
     : "d15");
 
 
+/*
 
+    bufYUV[0] = bufU[1];
+    bufYUV[1] = bufY[0];
+    bufYUV[2] = bufV[1];
+    bufYUV[3] = bufY[1];
+
+    bufYUV[4] = bufU[3];
+    bufYUV[5] = bufY[2];
+    bufYUV[6] = bufV[3];
+    bufYUV[7] = bufY[3];
+
+    bufYUV[8] = bufU[5];
+    bufYUV[9] = bufY[4];
+    bufYUV[10] = bufV[5];
+    bufYUV[11] = bufY[5];
+
+    bufYUV[12] = bufU[7];
+    bufYUV[13] = bufY[6];
+    bufYUV[14] = bufV[7];
+    bufYUV[15] = bufY[7];
+
+
+
+
+
+
+
+
+    //write pixel, YUYV
+    fwrite( bufYUV, 1, 16, pOutput );
+
+*/
+
+    //bufRGB  += 8*3;
+    //asm("add r1, r1, #24\n\t");
 
 
 
