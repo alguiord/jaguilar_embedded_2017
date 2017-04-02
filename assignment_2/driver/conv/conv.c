@@ -2,6 +2,9 @@
 #include <linux/module.h>
 
 #include <linux/fs.h> /* For the character driver support*/
+#include <linux/cdev.h> /*This is a char driver; makes cdev available*/
+#include <linux/semaphore.h> /*used to access semaphores; synchonization behaviors*/
+#include <asm/uaccess.h>  /*copy_to_user;copy_from_user*/
 
 #define DEVICE_NAME "char_conv"
 #define BUF_LEN 80            /* Max length of the message from the device */
@@ -10,9 +13,27 @@ static int Major_Number;
 
 MODULE_LICENSE("GPL");
 
+//uint8 *org_image;
+
+struct device{
+	unsigned char data[400000];
+	struct semaphore sem;
+} virtual_device;
+
+
+int ret;  //Will be used to hold return values
+
+
 int conv_open(struct inode *pinode, struct file *pfile)
 {
 	printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
+	/*
+	if(down_interruptible(&virtual_device.sem) != 0){
+		printk(KERN_ALERT "%s: Could not lock device during open\n", DEVICE_NAME );
+		return -1;
+	
+	}
+	*/
 	return 0;
 }
 
@@ -20,13 +41,16 @@ int conv_open(struct inode *pinode, struct file *pfile)
 int conv_read(struct file *pfile, char __user *buffer, size_t length, loff_t *offset)
 {
 	printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
-	return 0;
+	ret = copy_to_user(buffer, virtual_device.data,length);
+	
+	return ret;
 }
 
 int conv_write(struct file *pfile, const char __user *buffer, size_t length, loff_t *offset)
 {
 	printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
-	return length;
+	ret = copy_from_user(virtual_device.data, buffer, length);
+	return ret;
 }
 
 int conv_close(struct inode *pinode, struct file *pfile)
