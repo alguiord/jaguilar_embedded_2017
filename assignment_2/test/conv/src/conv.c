@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <string.h>
 
 #define PNGSUITE_PRIMARY
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -16,6 +17,9 @@
 
 
 #define DEVICE "/dev/conv"
+#define DEBUG 1
+
+
 
 static int fd;
 static int w,h, depth, req_comp; 
@@ -81,16 +85,18 @@ int main(int argc, char **argv)
 		fprintf(stderr, "-Info- Convolution program will apply the algorith number %i to the src image\n", kernel);
 	}
 
+	printf("1\n");
 
 	device_check();
-
-	
-
-
         write_image_to_device(in_image_path);
 
-	//uint8 *org_image;
-	//read_image_from_device(org_image,w,h, depth, req_comp);
+	printf("2\n");
+
+        device_check();
+	read_image_from_device(out_image_path);
+
+	printf("3\n");
+
 
 	//run_kernel(in_image, out_image, kernel);
 
@@ -115,7 +121,6 @@ void device_check(){
 void write_image_to_device(char *srcfile){
 	uint8 *org_image;
 	org_image = stbi_load(srcfile, &w, &h, &depth, req_comp);
-
 	printf("------- Image Information on write_image_to_device-----------\n");
 	printf("-I- Src Image width     %i\n", w);	
 	printf("-I- Src Image height    %i\n", h);	
@@ -123,12 +128,14 @@ void write_image_to_device(char *srcfile){
 
 	int size_buffer_image = w*h*depth;
 
-	write(fd, org_image, size_buffer_image);
+        write(fd, org_image, size_buffer_image);
+        
         close(fd);
 }
 
-void read_image_from_device(uint8 *result_image){
 
+void read_image_from_device(char *dstfile){
+        printf("inside read_image_from_device\n");
 	printf("------- Image Information on read_image_from_device-----------\n");
 	printf("-I- Src Image width     %i\n", w);	
 	printf("-I- Src Image height    %i\n", h);	
@@ -136,8 +143,15 @@ void read_image_from_device(uint8 *result_image){
 
 
         int size_buffer_image = w*h*depth;
+	
 
+        uint8* result_image = (uint8*) malloc (sizeof(uint8)*size_buffer_image);
+        memset( result_image, 0, size_buffer_image );
+	
 	read(fd,result_image, size_buffer_image);
+        stbi_write_bmp(dstfile,w,h,depth,result_image);
+        close(fd);
+	
 }
 
 
