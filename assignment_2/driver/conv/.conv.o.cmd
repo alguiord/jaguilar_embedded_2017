@@ -1,8 +1,8 @@
-cmd_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/conv/conv.o := gcc -Wp,-MD,/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/conv/.conv.o.d  -nostdinc -isystem /usr/lib/gcc/i686-linux-gnu/4.8/include  -I./arch/x86/include -Iarch/x86/include/generated/uapi -Iarch/x86/include/generated  -Iinclude -I./arch/x86/include/uapi -Iarch/x86/include/generated/uapi -I./include/uapi -Iinclude/generated/uapi -include ./include/linux/kconfig.h -Iubuntu/include  -D__KERNEL__ -fno-pie -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -fno-PIE -fno-pie -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -m32 -msoft-float -mregparm=3 -freg-struct-return -fno-pic -mpreferred-stack-boundary=2 -march=i686 -mtune=generic -maccumulate-outgoing-args -Wa,-mtune=generic32 -ffreestanding -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -DCONFIG_AS_CFI_SECTIONS=1 -DCONFIG_AS_SSSE3=1 -DCONFIG_AS_CRC32=1 -DCONFIG_AS_AVX=1 -DCONFIG_AS_AVX2=1 -DCONFIG_AS_SHA1_NI=1 -DCONFIG_AS_SHA256_NI=1 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -fno-delete-null-pointer-checks -Wno-maybe-uninitialized -O2 --param=allow-store-data-races=0 -Wframe-larger-than=1024 -fstack-protector -Wno-unused-but-set-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-var-tracking-assignments -pg -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fconserve-stack -Werror=implicit-int -Werror=strict-prototypes -DCC_HAVE_ASM_GOTO  -DMODULE  -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(conv)"  -D"KBUILD_MODNAME=KBUILD_STR(conv)" -c -o /home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/conv/.tmp_conv.o /home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/conv/conv.c
+cmd_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/driver/conv/conv.o := gcc -Wp,-MD,/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/driver/conv/.conv.o.d  -nostdinc -isystem /usr/lib/gcc/i686-linux-gnu/4.8/include  -I./arch/x86/include -Iarch/x86/include/generated/uapi -Iarch/x86/include/generated  -Iinclude -I./arch/x86/include/uapi -Iarch/x86/include/generated/uapi -I./include/uapi -Iinclude/generated/uapi -include ./include/linux/kconfig.h -Iubuntu/include  -D__KERNEL__ -fno-pie -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -std=gnu89 -fno-PIE -fno-pie -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -m32 -msoft-float -mregparm=3 -freg-struct-return -fno-pic -mpreferred-stack-boundary=2 -march=i686 -mtune=generic -maccumulate-outgoing-args -Wa,-mtune=generic32 -ffreestanding -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -DCONFIG_AS_CFI_SECTIONS=1 -DCONFIG_AS_SSSE3=1 -DCONFIG_AS_CRC32=1 -DCONFIG_AS_AVX=1 -DCONFIG_AS_AVX2=1 -DCONFIG_AS_SHA1_NI=1 -DCONFIG_AS_SHA256_NI=1 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -fno-delete-null-pointer-checks -Wno-maybe-uninitialized -O2 --param=allow-store-data-races=0 -Wframe-larger-than=1024 -fstack-protector -Wno-unused-but-set-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-var-tracking-assignments -pg -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fconserve-stack -Werror=implicit-int -Werror=strict-prototypes -DCC_HAVE_ASM_GOTO  -DMODULE  -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(conv)"  -D"KBUILD_MODNAME=KBUILD_STR(conv)" -c -o /home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/driver/conv/.tmp_conv.o /home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/driver/conv/conv.c
 
-source_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/conv/conv.o := /home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/conv/conv.c
+source_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/driver/conv/conv.o := /home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/driver/conv/conv.c
 
-deps_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/conv/conv.o := \
+deps_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/driver/conv/conv.o := \
   include/linux/init.h \
     $(wildcard include/config/broken/rodata.h) \
     $(wildcard include/config/lto.h) \
@@ -41,40 +41,22 @@ deps_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/as
     $(wildcard include/config/lbdaf.h) \
     $(wildcard include/config/arch/dma/addr/t/64bit.h) \
     $(wildcard include/config/phys/addr/t/64bit.h) \
-  include/linux/module.h \
-    $(wildcard include/config/modules.h) \
-    $(wildcard include/config/sysfs.h) \
-    $(wildcard include/config/module/sig.h) \
-    $(wildcard include/config/modules/tree/lookup.h) \
-    $(wildcard include/config/unused/symbols.h) \
-    $(wildcard include/config/generic/bug.h) \
-    $(wildcard include/config/kallsyms.h) \
-    $(wildcard include/config/smp.h) \
-    $(wildcard include/config/tracepoints.h) \
-    $(wildcard include/config/tracing.h) \
-    $(wildcard include/config/event/tracing.h) \
-    $(wildcard include/config/ftrace/mcount/record.h) \
-    $(wildcard include/config/livepatch.h) \
-    $(wildcard include/config/module/unload.h) \
-    $(wildcard include/config/constructors.h) \
-    $(wildcard include/config/debug/set/module/ronx.h) \
-  include/linux/list.h \
-    $(wildcard include/config/debug/list.h) \
-  include/linux/poison.h \
-    $(wildcard include/config/illegal/pointer/value.h) \
-  include/uapi/linux/const.h \
   include/linux/kernel.h \
     $(wildcard include/config/preempt/voluntary.h) \
     $(wildcard include/config/debug/atomic/sleep.h) \
     $(wildcard include/config/mmu.h) \
     $(wildcard include/config/prove/locking.h) \
     $(wildcard include/config/panic/timeout.h) \
+    $(wildcard include/config/tracing.h) \
+    $(wildcard include/config/ftrace/mcount/record.h) \
   /usr/lib/gcc/i686-linux-gnu/4.8/include/stdarg.h \
   include/linux/linkage.h \
   include/linux/stringify.h \
   include/linux/export.h \
     $(wildcard include/config/have/underscore/symbol/prefix.h) \
+    $(wildcard include/config/modules.h) \
     $(wildcard include/config/modversions.h) \
+    $(wildcard include/config/unused/symbols.h) \
   arch/x86/include/asm/linkage.h \
     $(wildcard include/config/x86/64.h) \
     $(wildcard include/config/x86/alignment/16.h) \
@@ -82,6 +64,7 @@ deps_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/as
   arch/x86/include/asm/bitops.h \
     $(wildcard include/config/x86/cmov.h) \
   arch/x86/include/asm/alternative.h \
+    $(wildcard include/config/smp.h) \
     $(wildcard include/config/paravirt.h) \
   arch/x86/include/asm/asm.h \
   arch/x86/include/asm/ptrace.h \
@@ -89,6 +72,7 @@ deps_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/as
   arch/x86/include/asm/segment.h \
     $(wildcard include/config/cc/stackprotector.h) \
     $(wildcard include/config/x86/32/lazy/gs.h) \
+  include/uapi/linux/const.h \
   arch/x86/include/asm/page_types.h \
     $(wildcard include/config/physical/start.h) \
     $(wildcard include/config/physical/align.h) \
@@ -176,6 +160,22 @@ deps_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/as
     $(wildcard include/config/x86/vsmp.h) \
   include/linux/dynamic_debug.h \
   arch/x86/include/asm/div64.h \
+  include/linux/module.h \
+    $(wildcard include/config/sysfs.h) \
+    $(wildcard include/config/module/sig.h) \
+    $(wildcard include/config/modules/tree/lookup.h) \
+    $(wildcard include/config/generic/bug.h) \
+    $(wildcard include/config/kallsyms.h) \
+    $(wildcard include/config/tracepoints.h) \
+    $(wildcard include/config/event/tracing.h) \
+    $(wildcard include/config/livepatch.h) \
+    $(wildcard include/config/module/unload.h) \
+    $(wildcard include/config/constructors.h) \
+    $(wildcard include/config/debug/set/module/ronx.h) \
+  include/linux/list.h \
+    $(wildcard include/config/debug/list.h) \
+  include/linux/poison.h \
+    $(wildcard include/config/illegal/pointer/value.h) \
   include/linux/stat.h \
   arch/x86/include/uapi/asm/stat.h \
   include/uapi/linux/stat.h \
@@ -652,7 +652,15 @@ deps_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/as
   include/uapi/linux/fcntl.h \
   arch/x86/include/uapi/asm/fcntl.h \
   include/uapi/asm-generic/fcntl.h \
+  include/linux/cdev.h \
+  arch/x86/include/asm/uaccess.h \
+    $(wildcard include/config/x86/intel/usercopy.h) \
+    $(wildcard include/config/debug/strict/user/copy/checks.h) \
+  arch/x86/include/asm/smap.h \
+    $(wildcard include/config/x86/smap.h) \
+  arch/x86/include/asm/uaccess_32.h \
+  /home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/driver/conv/chardev.h \
 
-/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/conv/conv.o: $(deps_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/conv/conv.o)
+/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/driver/conv/conv.o: $(deps_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/driver/conv/conv.o)
 
-$(deps_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/conv/conv.o):
+$(deps_/home/alguirod/Documents/Maestria/Arqui/Proyecto2/jaguilar_embedded_2017/assignment_2/driver/conv/conv.o):

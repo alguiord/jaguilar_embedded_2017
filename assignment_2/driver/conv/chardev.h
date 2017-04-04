@@ -18,8 +18,8 @@
 #define MAJOR_NUM 246
 
 
-/* Set the message of the device driver */
-#define IOCTL_SET_MSG _IOR(MAJOR_NUM, 0, char *)
+/* Set the mode for the convolution */
+#define IOCTL_SET_MODE _IOR(MAJOR_NUM, 0, int)
 /* _IOR means that we're creating an ioctl command 
  * number for passing information from a user process
  * to the kernel module. 
@@ -34,20 +34,22 @@
  * the process to the kernel.
  */
 
-/* Get the message of the device driver */
-#define IOCTL_GET_MSG _IOR(MAJOR_NUM, 1, char *)
- /* This IOCTL is used for output, to get the message 
-  * of the device driver. However, we still need the 
-  * buffer to place the message in to be input, 
-  * as it is allocated by the process.
-  */
+/* Start the convolution process in the device driver */
+#define IOCTL_START_CONV _IOR(MAJOR_NUM, 1, char*)
 
 
-/* Get the n'th byte of the message */
-#define IOCTL_GET_NTH_BYTE _IOWR(MAJOR_NUM, 2, int)
- /* The IOCTL is used for both input and output. It 
-  * receives from the user a number, n, and returns 
-  * Message[n]. */
+/* Set the width of the image*/
+#define IOCTL_SET_WIDTH _IOR(MAJOR_NUM, 2, int)
+
+/* Set the height of the image*/
+#define IOCTL_SET_HEIGHT _IOR(MAJOR_NUM, 3, int)
+
+/* Set the depth of the image*/
+#define IOCTL_SET_DEPTH _IOR(MAJOR_NUM, 4, int)
+
+
+
+
 
 
 /* The name of the device file */
