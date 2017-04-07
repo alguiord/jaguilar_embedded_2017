@@ -1,0 +1,1 @@
+./conv -i lena.jpg -i lena.bmp -m 1
