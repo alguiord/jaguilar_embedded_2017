@@ -1,5 +1,5 @@
 #!/bin/bash
-make -C /lib/modules/$(uname -r)/build M=$PWD modules
+make -C /lib/modules/$(uname -r)/build M=$PWD modules -Waggressive-loop-optimizations
 sudo rm /dev/conv
 sudo rmmod conv 
 sudo insmod ./conv.ko

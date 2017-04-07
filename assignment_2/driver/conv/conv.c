@@ -17,10 +17,13 @@ static int Major_Number;
 MODULE_LICENSE("GPL");
 
 static int kernel;
-static int width,height,depth;
+#define width  320
+#define height 240
+#define depth  3
 
 struct device{
-	unsigned char data[400000];
+	unsigned char data[width*height*depth];
+        unsigned char datatmp[height][width][depth];
 	struct semaphore sem;
 } virtual_device;
 
@@ -66,68 +69,97 @@ int conv_close(struct inode *pinode, struct file *pfile)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void kernel_left_sobel (unsigned char *result_image, int h, int row, int w, int col, int depth, int z, unsigned char image[h][w][depth]){
 
-	result_image[(row * w + col) * depth + z] = (
-						image[row-1][col-1][z]*1 + image[row-1][col][z]*0 + image[row-1][col+1][z]*-1 + 
-						image[row]  [col-1][z]*2 + image[row]  [col][z]*0 + image[row]  [col+1][z]*-2 + 
-						image[row+1][col-1][z]*1 + image[row+1][col][z]*0 + image[row+1][col+1][z]*-1);
+
+
+void kernel_identity (int row, int col, int d){
+	printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
+	
+	virtual_device.data[(row * width + col) * depth + d] = (
+	  virtual_device.datatmp[row-1][col-1][d]*0 + virtual_device.datatmp[row-1][col][d]*0 + virtual_device.datatmp[row-1][col+1][d]*0 + 
+	  virtual_device.datatmp[row]  [col-1][d]*0 + virtual_device.datatmp[row]  [col][d]*1 + virtual_device.datatmp[row]  [col+1][d]*0 + 
+	  virtual_device.datatmp[row+1][col-1][d]*0 + virtual_device.datatmp[row+1][col][d]*0 + virtual_device.datatmp[row+1][col+1][d]*0);
+}
+
+void kernel_sharpen (int row, int col, int d){
+	printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
+
+	  virtual_device.data[(row * width + col) * depth + d] = (
+	  virtual_device.datatmp[row-1][col-1][d]*0 + virtual_device.datatmp[row-1][col][d]*-1 + virtual_device.datatmp[row-1][col+1][d]*0 + 
+	  virtual_device.datatmp[row]  [col-1][d]*-1 + virtual_device.datatmp[row]  [col][d]*5 + virtual_device.datatmp[row]  [col+1][d]*-1 + 
+	  virtual_device.datatmp[row+1][col-1][d]*0 + virtual_device.datatmp[row+1][col][d]*-1 + virtual_device.datatmp[row+1][col+1][d]*0);
+}
+
+
+void kernel_left_sobel (int row, int col, int d){
+	printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
+
+	virtual_device.data[(row * width + col) * depth + d] = (
+	  virtual_device.datatmp[row-1][col-1][d]*1 + virtual_device.datatmp[row-1][col][d]*0 + virtual_device.datatmp[row-1][col+1][d]*-1 + 
+	  virtual_device.datatmp[row]  [col-1][d]*2 + virtual_device.datatmp[row]  [col][d]*0 + virtual_device.datatmp[row]  [col+1][d]*-2 + 
+	  virtual_device.datatmp[row+1][col-1][d]*1 + virtual_device.datatmp[row+1][col][d]*0 + virtual_device.datatmp[row+1][col+1][d]*-1);
 }
 
 
 
+void create_image_arrays(void){
 
-void apply_kernel(void){
-
-    unsigned char image[height][width][depth];
-
-	
     int row, col, d;
+
+    printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
+   
 
     for (row = 0; row < height; row++) {
 	for (col = 0; col < width; col++) {
 	    for (d = 0; d < depth; d++) {
-		image[row][col][d] = virtual_device.data[(row * width + col) * depth + d];
+		virtual_device.datatmp[row][col][d] = virtual_device.data[(row * width + col) * depth + d];
+	    }
+	}
+     }
+}
+
+
+void apply_kernel(void){
+
+    
+    int row, col, d;
+
+    printk(KERN_ALERT "Kernel #%d \n",kernel);
+    printk(KERN_ALERT "height %d \n",height);
+    printk(KERN_ALERT "width %d \n",width);
+    printk(KERN_ALERT "depth %d \n",depth);
+
+    
+
+    printk(KERN_ALERT "Inside the %s function\n", __FUNCTION__);
+   
+    create_image_arrays(); 
+
+
+    
+    for (row = 1; row < height-1; row++) {
+	for (col = 1; col < width-1; col++) {
+	    for (d = 0; d < depth; d++) {
+		switch (kernel){
+			case 1:
+				kernel_identity(row,col,d);
+				break;
+			case 2:
+				kernel_sharpen(row,col,d);
+				break;
+			case 3:
+				kernel_left_sobel(row,col,d);
+				break;
+			default:
+				printk(KERN_ALERT "Kernel undefined\n");
+	
+		}
 	    }
 	}
      }
 
+  printk(KERN_ALERT "End of %s function\n", __FUNCTION__);
 
-
-    for (row = 0; row < height; row++) {
-	for (col = 0; col < width; col++) {
-            for (d = 0; d < depth; d++) {
-
-	        switch (kernel) {
-			case 1:
-				kernel_left_sobel(virtual_device.data, height, row, width, col, depth, d, image);	
-			break;
-				
-			case 2:
-				//kernel_identity(result, h, row, w, col, depth, z, c_image);							
-			break;			
-			
-			case 3:
-				//kernel_outline(result, h, row, w, col, depth, z, c_image);		
-			break;
-	
-			case 4:
-				//kernel_blur(result, h, row, w, col, depth, z, c_image);		
-			break;
-
-			case 5:
-				//kernel_sharpen(result, h, row, w, col, depth, z, c_image);		
-			break;
-
-			case 6:
-				//kernel_topsobel(result, h, row, w, col, depth, z, c_image);		
-			break;	
-			default:
-				printk(KERN_ALERT "-Error- Kernel %i is not found, exiting from the program ....\n", kernel);
-		}
-            }
-	}
-     }
 }
 
 
@@ -156,8 +188,8 @@ long conv_ioctl(
       printk(KERN_ALERT "Inside IOCTL_SET_WIDTH case\n");
 
       /* Get the parameter given to ioctl by the process */
-      width = (int) ioctl_param;
-      printk(KERN_ALERT "ioctl set width: %d \n",width);
+      //width = (int) ioctl_param;
+      //printk(KERN_ALERT "ioctl set width: %d \n",width);
  
       break;
 
@@ -165,8 +197,8 @@ long conv_ioctl(
       printk(KERN_ALERT "Inside IOCTL_SET_WIDTH case\n");
 
       /* Get the parameter given to ioctl by the process */
-      height = (int) ioctl_param;
-      printk(KERN_ALERT "ioctl set height: %d \n",height);
+      //height = (int) ioctl_param;
+      //printk(KERN_ALERT "ioctl set height: %d \n",height);
  
       break;
 
@@ -174,8 +206,8 @@ long conv_ioctl(
       printk(KERN_ALERT "Inside IOCTL_SET_DEPTH case\n");
 
       /* Get the parameter given to ioctl by the process */
-      depth = (int) ioctl_param;
-      printk(KERN_ALERT "ioctl set depth: %d \n",depth);
+      //depth = (int) ioctl_param;
+      //printk(KERN_ALERT "ioctl set depth: %d \n",depth);
  
       break;
 
@@ -203,10 +235,6 @@ long conv_ioctl(
 
   return SUCCESS;
 }
-
-
-
-
 
 
 
@@ -258,14 +286,6 @@ void conv_exit(void)
 	unregister_chrdev(Major_Number,DEVICE_NAME);
         //if (ret < 0) printk("Error in unregister_chrdev: %d\n", ret);
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
