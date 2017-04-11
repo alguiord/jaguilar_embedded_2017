@@ -1,0 +1,71 @@
+root@raspberrypi2:~/image# conv -i road_forest.jpeg -o 2_road_forest.bmp -m 2
+-Info- Convolution program will use the image road_forest.jpeg as the input image
+-Info- Convolution program will store the image resultant in the file 2_road_forest.bmp
+-Info- Convolution program will apply the algorith number 2 to the src image
+1
+Device /dev/conv exists 
+------- Image Information on write_image_to_device-----------
+-I- Src Image width     320
+-I- Src Image height    240
+-I- Src Image depth     3
+Device /dev/conv exists 
+Device /dev/conv exists 
+inside read_image_from_device
+------- Image Information on read_image_from_device-----------
+-I- Src Image width     320
+-I- Src Image height    240
+-I- Src Image depth     3
+root@raspberrypi2:~/image# conv -i road_forest.jpeg -o 1_road_forest.bmp -m 1
+-Info- Convolution program will use the image road_forest.jpeg as the input image
+-Info- Convolution program will store the image resultant in the file 1_road_forest.bmp
+-Info- Convolution program will apply the algorith number 1 to the src image
+1
+Device /dev/conv exists 
+------- Image Information on write_image_to_device-----------
+-I- Src Image width     320
+-I- Src Image height    240
+-I- Src Image depth     3
+Device /dev/conv exists 
+Device /dev/conv exists 
+inside read_image_from_device
+------- Image Information on read_image_from_device-----------
+-I- Src Image width     320
+-I- Src Image height    240
+-I- Src Image depth     3
+root@raspberrypi2:~/image# conv -i l                                         
+lena.jpg       load_conv.sh   load_conv.sh~  
+root@raspberrypi2:~/image# conv -i lena.jpg -o 1_lena.bmp -m 1
+-Info- Convolution program will use the image lena.jpg as the input image
+-Info- Convolution program will store the image resultant in the file 1_lena.bmp
+-Info- Convolution program will apply the algorith number 1 to the src image
+1
+Device /dev/conv exists 
+------- Image Information on write_image_to_device-----------
+-I- Src Image width     256
+-I- Src Image height    256
+-I- Src Image depth     3
+Device /dev/conv exists 
+Device /dev/conv exists 
+inside read_image_from_device
+------- Image Information on read_image_from_device-----------
+-I- Src Image width     256
+-I- Src Image height    256
+-I- Src Image depth     3
+root@raspberrypi2:~/image# conv -i lena.jpg -o 2_lena.bmp -m 2 
+-Info- Convolution program will use the image lena.jpg as the input image
+-Info- Convolution program will store the image resultant in the file 2_lena.bmp
+-Info- Convolution program will apply the algorith number 2 to the src image
+1
+Device /dev/conv exists 
+------- Image Information on write_image_to_device-----------
+-I- Src Image width     256
+-I- Src Image height    256
+-I- Src Image depth     3
+Device /dev/conv exists 
+Device /dev/conv exists 
+inside read_image_from_device
+------- Image Information on read_image_from_device-----------
+-I- Src Image width     256
+-I- Src Image height    256
+-I- Src Image depth     3
+root@raspberrypi2:~/image# 
