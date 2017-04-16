@@ -1,0 +1,7 @@
+AUTOMAKE_OPTIONS = foreign
+
+CFLAGS = -C /lib/modules/4.4.48/kernel M=$PWD modules
+
+bin_PROGRAMS = conv
+conv_SOURCES = conv.c
+conv_CFLAGS = -C /lib/modules/4.4.48/kernel M=$PWD modules 
