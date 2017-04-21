@@ -1,0 +1,8 @@
+Why did the first run of your application report a high cache miss rate?
+
+Because no data of the application is found in the cache the first time, the application "main" is only stored in the hard disk. When the application is launched the system move the application data ("code") from the hard disk to the cache.  
+
+
+Why did any subsequent execution report a decremental cache miss rate?
+
+Because more data of the application are stored into the cache. The system does not remove the data stored into the cache from the first run because expects that those data will be used soon, this is called the temporal locality principle.   

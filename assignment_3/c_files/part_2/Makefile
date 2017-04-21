@@ -1,0 +1,12 @@
+CC=gcc
+BINARY=main
+CFLAGS=-DDEBUG -DUSE_COLUMN_MAJOR
+#CFLAGS=-DDEBUG -DUSE_ROW_MAJOR
+
+.PHONY: clean
+
+all: $(BINARY).c
+	$(CC) $^ -o $(BINARY) $(CFLAGS)
+
+clean:
+	rm -rf $(BINARY)
