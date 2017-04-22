@@ -1,0 +1,48 @@
+foreach i ( 1 2 3 4)
+perf stat -e task-clock,cycles,instructions,cache-references,cache-misses ./main
+end
+
+
+ Performance counter stats for './main':
+
+          2.083883 task-clock                #    0.337 CPUs utilized
+           2473195 cycles                    #    1.187 GHz
+           2469044 instructions              #    1.00  insns per cycle
+             16474 cache-references          #    7.905 M/sec
+              5533 cache-misses              #   33.586 % of all cache refs
+
+       0.006183782 seconds time elapsed
+
+
+ Performance counter stats for './main':
+
+          0.832328 task-clock                #    0.547 CPUs utilized
+           2190083 cycles                    #    2.631 GHz
+           2324006 instructions              #    1.06  insns per cycle
+             14380 cache-references          #   17.277 M/sec
+              3513 cache-misses              #   24.430 % of all cache refs
+
+       0.001522231 seconds time elapsed
+
+
+ Performance counter stats for './main':
+
+          0.810054 task-clock                #    0.556 CPUs utilized
+           1979921 cycles                    #    2.444 GHz
+           2316117 instructions              #    1.17  insns per cycle
+             12816 cache-references          #   15.821 M/sec
+               518 cache-misses              #    4.042 % of all cache refs
+
+       0.001457131 seconds time elapsed
+
+
+ Performance counter stats for './main':
+
+          0.607700 task-clock                #    0.429 CPUs utilized
+           1889459 cycles                    #    3.109 GHz
+           2315761 instructions              #    1.23  insns per cycle
+             12765 cache-references          #   21.005 M/sec
+               158 cache-misses              #    1.238 % of all cache refs
+
+       0.001417140 seconds time elapsed
+

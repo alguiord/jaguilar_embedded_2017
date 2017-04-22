@@ -1,0 +1,50 @@
+\documentclass[12pt]{article}%
+
+\begin{document}
+
+\title{Assignment 3: Is it on cache?}
+
+\author{Antonio Aguilar Bravo, Brayan Alfaro Cerdas }
+
+\date{\today}
+\maketitle
+
+
+\section{First reference misses}
+
+        
+\subsection{Why did the first run of your application report a high cache miss rate?}
+
+Because no data of the application is found in the cache the first time, the application "main" is only stored in the hard disk. When the application is launched the system move the application data ("code") from the hard disk to the cache.  
+
+
+\subsection{Why did any subsequent execution report a decremental cache miss rate?}
+
+Because more data of the application are stored into the cache. The system does not remove the data stored into the cache from the first run because expects that those data will be used soon, this is called the temporal locality principle.   
+
+
+
+\section{Optimizing memory accesses on loops}
+
+
+\subsection {What kind of optimization is performed on the program?}
+
+The kind of optimization is loop permutation, which takes advantage of the memory ordering used by an specific programming language for data allocation improving data locality.
+
+\subsection {Why does the cache miss rate is higher for the \textit{row} results? Is this expected according to the loop optimizations implemented? Provide detail on your thoughts.}
+
+Answer
+
+\subsection {Why do the cache references are higher for the \textit{column} results? Provide detail on your thoughts.}
+
+Answer
+
+\subsection {Why do the cache misses are similar between both tests? Is this expected according to the loop optimization method implemented? Provide detail on your thoughts.}
+
+Answer
+
+\subsection {How is the loop optimization related to the instructions per cycle reported for each test case (\textit{insns per cycle}) ?}
+
+Answer
+
+\end{document}
