@@ -33,18 +33,19 @@ The kind of optimization is loop permutation, which takes advantage of the memor
 
 \subsection {Why does the cache miss rate is higher for the \textit{row} results? Is this expected according to the loop optimizations implemented? Provide detail on your thoughts.}
 
-Answer
+When the system brings data from the disk into the cache it does by little chuck of cache lines, typically 64 bytes, so when 1 byte needs to be accessed, it will be move into the cache together with others 63 consecutive bytes. The consecutive bytes are stored according to the language, "C" uses row major schema, that means the outer loop has to be for row iterations to take advantage of spacial locality principle. 
+According to this, we would expect to have lower cache miss rate, however this is not the case. Probably there is something in the cache design like mid-level cache (MLC) and last-level cache (LLC) that we need to take into account. First we need to understand if the \textit{perf stat} program used to get the results take the data from  MLC or LLC. The MLC is nearer to the CPU so it is faster and using the spacial locality principle we would get more cache hits,  So I would say that the \textit{perf stat} program only take the data from the LLC, because it seems that it is not seeing these cache hits. 
 
 \subsection {Why do the cache references are higher for the \textit{column} results? Provide detail on your thoughts.}
 
-Answer
+We see that the spacial locality principle does not only depends on  the kind of scheme the language uses to store data but also depends on how the cache stores those data, the system has the MLC which is smaller that the LLC, and we expect more misses in the MLC using the \textit{column} results, because the requested data are very apart one from other, but this cause the cache lines be moved from the MLC to the LLC, so we get more misses in the MLC but more hits in the LLC, and probably the \textit{perf stat} program only see the hits and misses of the LLC. 
 
 \subsection {Why do the cache misses are similar between both tests? Is this expected according to the loop optimization method implemented? Provide detail on your thoughts.}
 
-Answer
+According to the loop optimization method implemented we expect more cache misses in the column-major, but this is true thinking about the MLC level, but as the application takes the results from the LLC, this could be the same.  
 
 \subsection {How is the loop optimization related to the instructions per cycle reported for each test case (\textit{insns per cycle}) ?}
 
-Answer
+When the optimization Row-Major is used we get higher \textit{insns per cycle}, this is because as we mention earlier, more data are store in the MLC which is a cache level nearer to the CPU and faster.   
 
 \end{document}
