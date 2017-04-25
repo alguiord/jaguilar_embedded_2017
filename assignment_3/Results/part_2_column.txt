@@ -1,0 +1,76 @@
+fmci50198> foreach i ( 1 2 3 4 5 )
+foreach? perf stat -e task-clock,cycles,instructions,cache-references,cache-misses ./main image.gray 1280 720
+foreach? end                                                                                                 
+Loading image: image.gray                                                                                    
+
+ Performance counter stats for './main image.gray 1280 720':
+
+          4.721095 task-clock                #    0.062 CPUs utilized          
+        16,814,010 cycles                    #    3.561 GHz                    
+        24,419,320 instructions              #    1.45  insns per cycle        
+           188,640 cache-references          #   39.957 M/sec                  
+            41,899 cache-misses              #   22.211 % of all cache refs    
+
+       0.076554272 seconds time elapsed
+
+Loading image: image.gray
+
+ Performance counter stats for './main image.gray 1280 720':
+
+          4.832168 task-clock                #    0.318 CPUs utilized
+        17,217,566 cycles                    #    3.563 GHz
+        24,174,123 instructions              #    1.40  insns per cycle
+           327,799 cache-references          #   67.837 M/sec
+            44,741 cache-misses              #   13.649 % of all cache refs
+
+       0.015217596 seconds time elapsed
+
+Loading image: image.gray
+
+ Performance counter stats for './main image.gray 1280 720':
+
+          4.531660 task-clock                #    0.114 CPUs utilized
+        16,160,706 cycles                    #    3.566 GHz
+        24,024,357 instructions              #    1.49  insns per cycle
+           202,230 cache-references          #   44.626 M/sec
+            46,180 cache-misses              #   22.835 % of all cache refs
+
+       0.039652596 seconds time elapsed
+
+Loading image: image.gray
+
+ Performance counter stats for './main image.gray 1280 720':
+
+          4.678251 task-clock                #    0.278 CPUs utilized
+        16,720,166 cycles                    #    3.574 GHz
+        24,163,837 instructions              #    1.45  insns per cycle
+           246,521 cache-references          #   52.695 M/sec
+            45,961 cache-misses              #   18.644 % of all cache refs
+
+       0.016799725 seconds time elapsed
+
+Loading image: image.gray
+
+ Performance counter stats for './main image.gray 1280 720':
+
+          4.914747 task-clock                #    0.168 CPUs utilized
+        17,491,303 cycles                    #    3.559 GHz
+        24,398,978 instructions              #    1.39  insns per cycle
+           262,606 cache-references          #   53.432 M/sec
+            38,601 cache-misses              #   14.699 % of all cache refs
+
+       0.029179394 seconds time elapsed
+
+
+
+Average:
+
+	245,559.2 cache-references 
+	 43,476.4 cache-misses
+    0.0354807166 seconds time elapsed
+         
+
+
+
+
+

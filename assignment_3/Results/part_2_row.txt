@@ -1,0 +1,71 @@
+fmci50198> make                                
+gcc main.c -o main -DDEBUG -DUSE_ROW_MAJOR     
+fmci50198> foreach i ( 1 2 3 4 5 )             
+foreach? perf stat -e task-clock,cycles,instructions,cache-references,cache-misses ./main image.gray 1280 720
+foreach? end                                                                                                 
+Loading image: image.gray                                                                                    
+
+ Performance counter stats for './main image.gray 1280 720':
+
+          4.017499 task-clock                #    0.085 CPUs utilized          
+        14,296,575 cycles                    #    3.559 GHz                    
+        24,055,294 instructions              #    1.68  insns per cycle        
+            94,751 cache-references          #   23.585 M/sec                  
+            50,105 cache-misses              #   52.881 % of all cache refs    
+
+       0.047049545 seconds time elapsed
+
+Loading image: image.gray
+
+ Performance counter stats for './main image.gray 1280 720':
+
+          4.097580 task-clock                #    0.119 CPUs utilized
+        14,624,666 cycles                    #    3.569 GHz
+        24,025,124 instructions              #    1.64  insns per cycle
+            95,417 cache-references          #   23.286 M/sec
+            50,776 cache-misses              #   53.215 % of all cache refs
+
+       0.034400172 seconds time elapsed
+
+Loading image: image.gray
+
+ Performance counter stats for './main image.gray 1280 720':
+
+          3.783076 task-clock                #    0.067 CPUs utilized
+        13,493,951 cycles                    #    3.567 GHz
+        23,922,201 instructions              #    1.77  insns per cycle
+            88,563 cache-references          #   23.410 M/sec
+            46,196 cache-misses              #   52.162 % of all cache refs
+
+       0.056885721 seconds time elapsed
+
+Loading image: image.gray
+
+ Performance counter stats for './main image.gray 1280 720':
+
+          3.782351 task-clock                #    0.074 CPUs utilized
+        13,499,335 cycles                    #    3.569 GHz
+        23,910,718 instructions              #    1.77  insns per cycle
+            87,834 cache-references          #   23.222 M/sec
+            48,570 cache-misses              #   55.297 % of all cache refs
+
+       0.051005435 seconds time elapsed
+
+Loading image: image.gray
+
+ Performance counter stats for './main image.gray 1280 720':
+
+          3.930093 task-clock                #    0.263 CPUs utilized
+        13,985,771 cycles                    #    3.559 GHz
+        24,112,493 instructions              #    1.72  insns per cycle
+            89,518 cache-references          #   22.778 M/sec
+            41,837 cache-misses              #   46.736 % of all cache refs
+
+       0.014932017 seconds time elapsed
+
+
+
+Average:
+     91,216.6 cache-references
+     47,496.8 cache-misses
+  0.040854578 seconds time elapsed
